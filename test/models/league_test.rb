@@ -3,9 +3,16 @@ require 'test_helper'
 describe League do
   def setup_league
     @league = League.create(name:'league')
+  end
+  def setup_3_teams
+    setup_league
     @team1 = @league.teams.create(name:"team1")
     @team2 = @league.teams.create(name:"team2")
     @team3 = @league.teams.create(name:"team3")
+  end
+  def setup_4_teams
+    setup_3_teams
+    @team4 = @league.teams.create(name:"team4")
   end
 
   it "is invalid without a name" do
@@ -16,21 +23,16 @@ describe League do
 
   describe '#rounds' do
     it 'returns the correct number of rounds' do
-      setup_league
-      @team4 = @league.teams.create(name:"team4")
+      setup_4_teams
       @league.rounds.must_equal 3
     end
   end
 
 
   describe '#build_fixtures' do
-    before do
-      setup_league
-    end
-
     describe 'with even number of teams' do
       before do
-        @team4 = @league.teams.create(name:"team4")
+        setup_4_teams
         @league.build_fixtures
       end
 
@@ -49,6 +51,7 @@ describe League do
 
     describe 'with odd number of teams' do
       before do
+        setup_3_teams
         @league.build_fixtures
       end
 
@@ -59,6 +62,24 @@ describe League do
       it 'adds a team called Bye' do
         @league.teams.last.name.must_equal 'Bye'
       end
+    end
+  end
+
+  describe '.lookup' do
+    before do
+      setup_league
+    end
+
+    it 'finds the league by shortcode' do
+      League.lookup(@league.shortcode).must_equal @league
+    end
+
+    it 'finds the league by id' do
+      League.lookup(@league.id).must_equal @league
+    end
+
+    it 'raises RecordNotFound if not found' do
+      assert_raises(ActiveRecord::RecordNotFound) { League.lookup('sandwich') }
     end
   end
 end
