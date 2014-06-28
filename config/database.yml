@@ -81,5 +81,4 @@ test:
 production:
   <<: *default
   database: leaguebuilder_production
-  username: leaguebuilder
   password: <%= ENV['LEAGUEBUILDER_DATABASE_PASSWORD'] %>

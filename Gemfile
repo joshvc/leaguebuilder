@@ -34,6 +34,7 @@ gem 'autoprefixer-rails'
 gem 'simple_form'
 gem 'nested_form'
 
+gem 'rails_12factor', group: :production #heroku
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
