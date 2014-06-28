@@ -1,0 +1,17 @@
+%h1= @league.name
+
+.row
+  .col-md-6
+    %table
+      %tr
+        %th Teams
+      - @league.teams.each do |team|
+        %tr
+          %td= team.name
+  .col-md-6
+    %h2 Fixtures
+    - (1..@league.rounds).each do |i|
+      %h4= "Round #{i}"
+      - @league.fixtures.where(round: i).each do |fixture|
+        = "#{fixture.away_team.name} vs. #{fixture.home_team.name}"
+        %br/

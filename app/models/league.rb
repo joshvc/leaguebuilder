@@ -3,7 +3,10 @@ class League < ActiveRecord::Base
   has_many :fixtures
   validates :name, presence: true
 
+  accepts_nested_attributes_for :teams
+
   def build_fixtures
+    add_bye_team if teams.count.odd?
     team_array = teams.map{|t| t.id}
     (self.teams.count - 1).times do |i|
       round_array = team_array.clone
@@ -18,5 +21,15 @@ class League < ActiveRecord::Base
       team_array.pop
 
     end
+  end
+
+  def rounds
+    teams.count - 1
+  end
+
+  private
+
+  def add_bye_team
+    teams.create(name: "Bye")
   end
 end

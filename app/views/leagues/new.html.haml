@@ -1,0 +1,8 @@
+= simple_nested_form_for @league do |f|
+  = f.input :name, label: "League Name"
+  = f.fields_for :teams do |team_form|
+    = team_form.input :name, label: "Team Name"
+    = team_form.link_to_remove "Remove"
+  = f.link_to_add "Add a team", :teams
+  .br/
+  = f.submit
